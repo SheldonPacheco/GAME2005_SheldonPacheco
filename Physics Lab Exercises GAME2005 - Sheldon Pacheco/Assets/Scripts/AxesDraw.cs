@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class AccessStraw : MonoBehaviour 
 {
-    private void Start()
+    public bool local = false;
+    private void Update()
     {
         
     }
