@@ -63,8 +63,11 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Launch.cs" />
     <Compile Include="Assets\Scripts\FunkyMotion.cs" />
+    <Compile Include="Assets\Scripts\Game.cs" />
     <Compile Include="Assets\Scripts\Bounce.cs" />
+    <Compile Include="Assets\Scripts\PhysicsBody.cs" />
     <Compile Include="Assets\Scripts\AxesDraw.cs" />
+    <Compile Include="Assets\Scripts\PhysicsSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
