@@ -9,4 +9,6 @@ public class PhysicsBody
     public float launchAngle = 30f;
     public float launchSpeed = 10f;
     public Vector3 launchVelocity;
+    public bool isColliding = false;
+    public float radius = 1.0f;
 }

@@ -12,7 +12,6 @@ public class PhysicsSystem
 
     public List<PhysicsBody> bodies = new List<PhysicsBody>();
     private Game game;
-    private PhysicsBody physicsBody;
 
     public PhysicsSystem(Game game)
     {
@@ -31,37 +30,53 @@ public class PhysicsSystem
         {
             game.AddSphere();
         }
-
-        for (int i = bodies.Count - 1; i >= 0; i--) 
+        for (int i = 0; i < bodies.Count; i++)
+        {
+            bodies[i].isColliding = false;
+        }
+        for (int i = bodies.Count - 1; i >= 0; i--)
         {
             PhysicsBody body = bodies[i];
 
-            
+
             Vector3 acc = gravity / body.mass;
 
-            
+
             body.vel *= Mathf.Pow(body.drag, dt);
 
-           
+
             body.vel += acc * dt;
             body.pos += body.vel * dt;
 
-            
+
             if (body.pos.y <= 0.0f)
             {
-                body.vel.y = -body.vel.y * 1.5f; 
-                body.pos.y = 0.0f; 
+                body.vel.y = -body.vel.y * 1.5f;
+                body.pos.y = 0.0f;
             }
 
-            
+
             if (body.pos.x >= 12.0f)
             {
-                bodies.RemoveAt(i); 
+                bodies.RemoveAt(i);
+                continue;
             }
-            else
+            for (int j = i - 1; j >= 0; j--)
             {
-                bodies[i] = body; 
+                PhysicsBody secondBody = bodies[j];
+                if (CircleCircle(body.pos, body.radius, secondBody.pos, secondBody.radius))
+                {
+                    body.isColliding = true;
+                    secondBody.isColliding = true;
+                    
+                }
             }
+            bodies[i] = body;
         }
+    }
+    private bool CircleCircle (Vector3 center, float radius, Vector3 center2, float radius2)
+    {
+        float distance = Vector3.Distance(center, center2);
+        return distance < (radius + radius2);
     }
 }

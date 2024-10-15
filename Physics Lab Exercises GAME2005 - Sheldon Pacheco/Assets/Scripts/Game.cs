@@ -37,13 +37,22 @@ public class Game : MonoBehaviour
     }
     void OnDrawGizmos()
     {
+        
         for (int i = 0; i < physicsSystem.bodies.Count; i++)
         {
             PhysicsBody body = physicsSystem.bodies[i];
-            Gizmos.DrawSphere(body.pos, 1.0f);
+            if (body.isColliding)
+            {
+                Gizmos.color = Color.red;
+            }
+            else
+            {
+                Gizmos.color = Color.green;
+            }
+            Gizmos.DrawSphere(body.pos, body.radius);
         }
 
-        //TODO render all your physics bodies
+        
     }
     public void Relunach()
     {
