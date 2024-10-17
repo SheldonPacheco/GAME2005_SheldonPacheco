@@ -17,6 +17,8 @@ public class Game : MonoBehaviour
         {
             AddSphere();
         }
+        AddFloor();
+        AddHalfspace();
     }
     private void Update()
     {
@@ -49,7 +51,17 @@ public class Game : MonoBehaviour
             {
                 Gizmos.color = Color.green;
             }
-            Gizmos.DrawSphere(body.pos, body.radius);
+            if (body.shapeType == ShapeType.SPHERE)
+                Gizmos.DrawSphere(body.pos, body.radius);
+            else if (body.shapeType == ShapeType.PLANE)
+                Gizmos.DrawCube(body.pos, new Vector3(5.0f, 0.0f, 5.0f));
+            else if (body.shapeType == ShapeType.HALFSPACE)
+            {
+
+                Gizmos.color = Color.blue;
+                Gizmos.DrawCube(body.pos, new Vector3(5.0f, 0.0f, 5.0f));
+            }
+
         }
 
         
@@ -77,7 +89,30 @@ public class Game : MonoBehaviour
         body.vel = new Vector3(0.0f, Random.Range(5.0f, 15.0f), 0.0f);
         body.mass = Random.Range(0.5f, 2.0f);
         body.drag = 0.5f;
+        body.shapeType = ShapeType.SPHERE;
         body.launchVelocity = new Vector3(Mathf.Cos(body.launchAngle * Mathf.Deg2Rad) * body.launchSpeed, Mathf.Sin(body.launchAngle * Mathf.Deg2Rad) * body.launchSpeed, 0f);
         physicsSystem.bodies.Add(body);
+    }
+    public void AddFloor()
+    {
+        PhysicsBody floor = new PhysicsBody();
+        floor.pos = new Vector3(0.0f, -0.22f, 0.0f);
+        floor.vel = Vector3.zero;
+        floor.normal = Vector3.up;
+        floor.mass = Random.Range(0.5f, 2.0f);
+        floor.shapeType = ShapeType.PLANE;
+        floor.dynamic = false;
+        physicsSystem.bodies.Add(floor);
+    }
+    public void AddHalfspace()
+    {
+        PhysicsBody halfspace = new PhysicsBody();
+        halfspace.pos = new Vector3(0.0f, 2.5f, 0.0f);
+        halfspace.vel = Vector3.zero;
+        halfspace.normal = Vector3.up;
+        halfspace.mass = Random.Range(0.5f, 2.0f);
+        halfspace.shapeType = ShapeType.HALFSPACE;  
+        halfspace.dynamic = false; 
+        physicsSystem.bodies.Add(halfspace);
     }
 }

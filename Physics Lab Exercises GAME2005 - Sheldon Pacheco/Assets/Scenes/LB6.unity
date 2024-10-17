@@ -42,8 +42,7 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 13
-  m_BakeOnSceneLoad: 0
+  serializedVersion: 12
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -449,7 +448,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!23 &1189509717
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -594,7 +593,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a64174a8434a034793678dceedb7f98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fixedTimeStep: 0.03
 --- !u!4 &1706724777
 Transform:
   m_ObjectHideFlags: 0

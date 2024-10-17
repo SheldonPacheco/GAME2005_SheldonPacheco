@@ -39,7 +39,7 @@ public class PhysicsSystem
             PhysicsBody body = bodies[i];
 
 
-            Vector3 acc = gravity / body.mass;
+            Vector3 acc = body.dynamic ? gravity / body.mass : Vector3.zero;
 
 
             body.vel *= Mathf.Pow(body.drag, dt);
@@ -64,14 +64,37 @@ public class PhysicsSystem
             for (int j = i - 1; j >= 0; j--)
             {
                 PhysicsBody secondBody = bodies[j];
-                if (CircleCircle(body.pos, body.radius, secondBody.pos, secondBody.radius))
+                if (body.shapeType == ShapeType.SPHERE && body.shapeType == ShapeType.SPHERE)
                 {
-                    body.isColliding = true;
-                    secondBody.isColliding = true;
-                    
+                    if (CircleCircle(body.pos, body.radius, secondBody.pos, secondBody.radius))
+                    {
+                        body.isColliding = true;
+                        secondBody.isColliding = true;
+
+                    }
+
                 }
+                else if (body.shapeType == ShapeType.PLANE && body.shapeType == ShapeType.SPHERE)
+                {
+                    if (CirclePlane(body.pos, body.radius, secondBody.pos, secondBody.normal))
+                    {
+                        body.isColliding = true;
+                        secondBody.isColliding = true;
+
+                    }
+
+                }
+                else if (body.shapeType == ShapeType.SPHERE && body.shapeType == ShapeType.HALFSPACE)
+                {
+                    if (CircleHalfspace(body.pos, body.radius, secondBody.pos, secondBody.normal))
+                    {
+                        body.isColliding = true;
+                        secondBody.isColliding = true;
+                    }
+
+                }
+                bodies[i] = body;
             }
-            bodies[i] = body;
         }
     }
     private bool CircleCircle (Vector3 center, float radius, Vector3 center2, float radius2)
@@ -79,4 +102,31 @@ public class PhysicsSystem
         float distance = Vector3.Distance(center, center2);
         return distance < (radius + radius2);
     }
+    //LB6 TODO 2L complete this function to determine if a spheere and plane are overlapping
+    private bool CirclePlane(Vector3 sphereCenter, float sphereRadius, Vector3 planePosition, Vector3 planeNormal)
+    {
+        // Step 1: Compute the relative position of the sphere to the plane
+        Vector3 relativePosition = sphereCenter - planePosition;
+
+        // Step 2: Project the sphere's position along the plane's normal to get the distance from the plane
+        float distanceFromPlane = Vector3.Dot(relativePosition, planeNormal);
+
+        // Step 3: Check if the sphere is overlapping with the plane
+        // If the absolute distance from the plane is less than the sphere's radius, they are colliding
+        return Mathf.Abs(distanceFromPlane) <= sphereRadius;
+
+    }
+    private bool CircleHalfspace(Vector3 sphereCenter, float sphereRadius, Vector3 halfspacePosition, Vector3 halfspaceNormal)
+    {
+        // Step 1: Compute the relative position of the sphere to the halfspace
+        Vector3 relativePosition = sphereCenter - halfspacePosition;
+
+        // Step 2: Project the sphere's position along the halfspace's normal to get the distance from the plane
+        float distanceFromHalfspace = Vector3.Dot(relativePosition, halfspaceNormal);
+
+        // Step 3: Check if the sphere is behind the halfspace plane
+        // If the distance is less than or equal to the radius, the sphere is overlapping with the halfspace
+        return distanceFromHalfspace <= sphereRadius;
+    }
+
 }
